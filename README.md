@@ -18,7 +18,9 @@ to run backend, cd to backend then:
 
 .\mvnw.cmd spring-boot:run
 
-server is at http://localhost:8080/
+server is at: 
+
+http://localhost:8080/
 
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
