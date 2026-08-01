@@ -7,11 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class BackendController
 {
 
-    public BackendController()
-    {
-        System.out.println(">>> BackendController constructed <<<");
-    }
-
     @GetMapping("/")
     public String getBackendStatus()
     {
