@@ -3,7 +3,7 @@ package com.gamerecc.backend;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.gamerecc.backend")
 public class BackendApplication {
 
 	public static void main(String[] args) {
