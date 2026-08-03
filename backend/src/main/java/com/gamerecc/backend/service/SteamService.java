@@ -6,6 +6,11 @@ import org.springframework.stereotype.Service;
 
 import com.gamerecc.backend.config.SteamConfig;
 
+import java.net.URI;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.io.IOException;
+
 @Service
 public class SteamService 
 {
@@ -25,11 +30,44 @@ public class SteamService
     public String getAppList()
     {
         String url = 
-        "https://partner.steam-api.com/IStoreService/GetAppList/v1/"
+        "https://api.steampowered.com/IStoreService/GetAppList/v1/"
         + "?key=" + steamConfig.getApiKey()
         + "&max_results=10";
 
-        return "not implemented yet"; 
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .GET()
+            .build();
 
+        HttpResponse<String> response;
+
+        try
+        {
+            response = httpClient.send(
+            request,
+            HttpResponse.BodyHandlers.ofString()
+            );
+
+            System.out.println("Status: " + response.statusCode());
+            System.out.println(response.body());
+
+            return response.body();
+        }
+        catch (IOException e)
+        {
+            System.out.println("Failed to communicate with Steam.");
+            e.printStackTrace();
+
+            return "Steam request failed: ";
+        }
+        catch (InterruptedException e)
+        {
+            Thread.currentThread().interrupt();
+
+            System.out.println("Steam request interrupted.");
+            e.printStackTrace();
+
+            return "Steam request interrupted: ";
+        }
     }
 }
