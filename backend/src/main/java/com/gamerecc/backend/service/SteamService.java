@@ -5,6 +5,9 @@ import java.net.http.HttpClient;
 import org.springframework.stereotype.Service;
 
 import com.gamerecc.backend.config.SteamConfig;
+import com.gamerecc.backend.model.SteamApiResponse;
+
+import tools.jackson.databind.ObjectMapper;
 
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -16,11 +19,13 @@ public class SteamService
 {
     private final SteamConfig steamConfig;
     private final HttpClient httpClient;
+    private final ObjectMapper objectMapper;
 
     public SteamService(SteamConfig steamConfig)
     {
         this.steamConfig = steamConfig;
         this.httpClient = HttpClient.newHttpClient();
+        this.objectMapper = new ObjectMapper();
 
         System.out.println("SteamService created");
 
@@ -50,6 +55,10 @@ public class SteamService
 
             System.out.println("Status: " + response.statusCode());
             System.out.println(response.body());
+
+            SteamApiResponse steamApiResponse = objectMapper.readValue(response.body(), SteamApiResponse.class);
+
+            System.out.println(steamApiResponse.getResponse().getApps().getFirst().getName());
 
             return response.body();
         }
