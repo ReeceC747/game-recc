@@ -32,7 +32,7 @@ public class SteamService
         getAppList();
     }
 
-    public String getAppList()
+    public SteamApiResponse getAppList()
     {
         String url = 
         "https://api.steampowered.com/IStoreService/GetAppList/v1/"
@@ -60,14 +60,14 @@ public class SteamService
 
             System.out.println(steamApiResponse.getResponse().getApps().getFirst().getName());
 
-            return response.body();
+            return steamApiResponse;
         }
         catch (IOException e)
         {
             System.out.println("Failed to communicate with Steam.");
             e.printStackTrace();
 
-            return "Steam request failed: ";
+            return null;
         }
         catch (InterruptedException e)
         {
@@ -76,7 +76,7 @@ public class SteamService
             System.out.println("Steam request interrupted.");
             e.printStackTrace();
 
-            return "Steam request interrupted: ";
+            return null;
         }
     }
 }
