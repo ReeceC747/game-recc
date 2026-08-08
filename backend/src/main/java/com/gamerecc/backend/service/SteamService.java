@@ -6,12 +6,15 @@ import org.springframework.stereotype.Service;
 
 import com.gamerecc.backend.config.SteamConfig;
 import com.gamerecc.backend.model.SteamApiResponse;
+import com.gamerecc.backend.model.SteamApp;
 
 import tools.jackson.databind.ObjectMapper;
 
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
+import java.util.Random;
 import java.io.IOException;
 
 @Service
@@ -28,11 +31,9 @@ public class SteamService
         this.objectMapper = new ObjectMapper();
 
         System.out.println("SteamService created");
-
-        getAppList();
     }
 
-    public SteamApiResponse getAppList()
+    public SteamApiResponse getAppList() throws IOException, InterruptedException
     {
         String url = 
         "https://api.steampowered.com/IStoreService/GetAppList/v1/"
@@ -46,37 +47,35 @@ public class SteamService
 
         HttpResponse<String> response;
 
-        try
+        response = httpClient.send(
+        request,
+        HttpResponse.BodyHandlers.ofString()
+        );
+
+        System.out.println("Status: " + response.statusCode());
+        System.out.println(response.body());
+
+        SteamApiResponse steamApiResponse = objectMapper.readValue(response.body(), SteamApiResponse.class);
+
+        System.out.println(steamApiResponse.getResponse().getApps().getFirst().getName());
+
+        return steamApiResponse;
+    }
+
+    public SteamApp getRandomGame() throws IOException, InterruptedException
+    {
+        SteamApiResponse steamApiResponse = getAppList();
+
+        List<SteamApp> apps = steamApiResponse.getResponse().getApps();
+
+        if(apps.isEmpty())
         {
-            response = httpClient.send(
-            request,
-            HttpResponse.BodyHandlers.ofString()
-            );
-
-            System.out.println("Status: " + response.statusCode());
-            System.out.println(response.body());
-
-            SteamApiResponse steamApiResponse = objectMapper.readValue(response.body(), SteamApiResponse.class);
-
-            System.out.println(steamApiResponse.getResponse().getApps().getFirst().getName());
-
-            return steamApiResponse;
+            throw new IllegalStateException("Steam returned no games.");
         }
-        catch (IOException e)
-        {
-            System.out.println("Failed to communicate with Steam.");
-            e.printStackTrace();
 
-            return null;
-        }
-        catch (InterruptedException e)
-        {
-            Thread.currentThread().interrupt();
+        Random random = new Random();
+        int randomIndex = random.nextInt(apps.size());
 
-            System.out.println("Steam request interrupted.");
-            e.printStackTrace();
-
-            return null;
-        }
+        return apps.get(randomIndex);
     }
 }
