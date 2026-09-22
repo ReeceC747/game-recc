@@ -1,8 +1,14 @@
 package com.gamerecc.backend.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class SteamApp 
 {
+    @Id
     private int appid;
+    
     private String name;
     private long last_modified;
     private long price_change_number;

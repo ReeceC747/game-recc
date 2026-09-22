@@ -8,16 +8,19 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.gamerecc.backend.model.SteamApp;
 import com.gamerecc.backend.service.SteamService;
+import com.gamerecc.backend.service.GameCatalogService;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class BackendController
 {
     private final SteamService steamService;
+    private final GameCatalogService gameCatalogService;
 
-    public BackendController(SteamService steamService)
+    public BackendController(SteamService steamService, GameCatalogService gameCatalogService)
     {
         this.steamService = steamService;
+        this.gameCatalogService = gameCatalogService;
     }
 
     @GetMapping("/")
@@ -31,5 +34,17 @@ public class BackendController
     {
         return steamService.getRandomGame();
     }
-    
+
+    @GetMapping("/catalog/refresh")
+    public int refreshCatalog() throws IOException, InterruptedException
+    {
+        return gameCatalogService.refreshCatalog();
+    }
+
+    @GetMapping ("/catalog/count")
+    public long getCatalogCount()
+    {
+        return gameCatalogService.getCatalogCount();
+    }
+
 }
