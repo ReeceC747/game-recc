@@ -1,5 +1,6 @@
 package com.gamerecc.backend.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -9,7 +10,9 @@ public class SteamApp
     @Id
     private int appid;
     
+    @Column(length = 1000)
     private String name;
+    
     private long last_modified;
     private long price_change_number;
 

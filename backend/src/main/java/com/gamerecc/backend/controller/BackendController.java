@@ -32,8 +32,9 @@ public class BackendController
     @GetMapping("/random")
     public SteamApp getRandomGame() throws IOException, InterruptedException
     {
-        return steamService.getRandomGame();
+        return gameCatalogService.getRandomGame();
     }
+
 
     @GetMapping("/catalog/refresh")
     public int refreshCatalog() throws IOException, InterruptedException

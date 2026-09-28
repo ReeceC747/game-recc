@@ -33,12 +33,13 @@ public class SteamService
         System.out.println("SteamService created");
     }
 
-    public SteamApiResponse getAppList() throws IOException, InterruptedException
+    public SteamApiResponse getAppList(int lastAppId, int maxResults) throws IOException, InterruptedException
     {
         String url = 
         "https://api.steampowered.com/IStoreService/GetAppList/v1/"
         + "?key=" + steamConfig.getApiKey()
-        + "&max_results=10";
+        + "&max_results=" + maxResults
+        + "&last_appid=" + lastAppId;
 
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(url))
@@ -57,25 +58,6 @@ public class SteamService
 
         SteamApiResponse steamApiResponse = objectMapper.readValue(response.body(), SteamApiResponse.class);
 
-        System.out.println(steamApiResponse.getResponse().getApps().getFirst().getName());
-
         return steamApiResponse;
-    }
-
-    public SteamApp getRandomGame() throws IOException, InterruptedException
-    {
-        SteamApiResponse steamApiResponse = getAppList();
-
-        List<SteamApp> apps = steamApiResponse.getResponse().getApps();
-
-        if(apps.isEmpty())
-        {
-            throw new IllegalStateException("Steam returned no games.");
-        }
-
-        Random random = new Random();
-        int randomIndex = random.nextInt(apps.size());
-
-        return apps.get(randomIndex);
     }
 }
