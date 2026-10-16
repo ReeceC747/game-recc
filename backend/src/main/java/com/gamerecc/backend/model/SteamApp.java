@@ -4,6 +4,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
+/**
+ * Represents the Steam App data structure returned by the Steam API. Is also used as the entity for the database table storing Steam App data.
+ */
 @Entity
 public class SteamApp 
 {

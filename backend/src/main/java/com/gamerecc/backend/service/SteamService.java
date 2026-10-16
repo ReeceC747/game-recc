@@ -6,17 +6,17 @@ import org.springframework.stereotype.Service;
 
 import com.gamerecc.backend.config.SteamConfig;
 import com.gamerecc.backend.model.SteamApiResponse;
-import com.gamerecc.backend.model.SteamApp;
 
 import tools.jackson.databind.ObjectMapper;
 
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.List;
-import java.util.Random;
 import java.io.IOException;
 
+/**
+ * Service class responsible for interacting with the Steam API. It uses the SteamConfig to retrieve the API key and makes HTTP requests to fetch game data.
+ */
 @Service
 public class SteamService 
 {
@@ -24,6 +24,10 @@ public class SteamService
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
 
+    /**
+     * Constructor for SteamService. Initializes the HTTP client and object mapper, and retrieves the Steam API key from the provided SteamConfig.
+     * @param steamConfig
+     */
     public SteamService(SteamConfig steamConfig)
     {
         this.steamConfig = steamConfig;

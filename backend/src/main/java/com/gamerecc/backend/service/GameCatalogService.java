@@ -11,19 +11,32 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-
+/**
+ * Service class responsible for managing the game catalog. It interacts with the SteamService to fetch game data and the SteamAppRepository to store and retrieve game information from the database.
+ * GameCatalogService
+ */
 @Service
 public class GameCatalogService
 {
     private final SteamService steamService;
     private final SteamAppRepository steamAppRepository;
 
+    /**
+     * Constructor for GameCatalogService. Initializes the SteamService and SteamAppRepository for managing the game catalog.
+     * @param steamService
+     * @param steamAppRepository
+     */
     public GameCatalogService(SteamService steamService, SteamAppRepository steamAppRepository)
     {
         this.steamService = steamService;
         this.steamAppRepository = steamAppRepository;
     }
 
+    /**
+     * Fetches the list of games from the Steam API based off the last appid in the database and saves them to the database.
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public void updateGameCatalog() throws IOException, InterruptedException
     {
         SteamApiResponse steamApiResponse = steamService.getAppList(0, 50000);
@@ -34,6 +47,12 @@ public class GameCatalogService
     }
 
 
+    /**
+     * Refreshes the game catalog by fetching data from the Steam API and saving it to the database. It continues fetching until there are no more apps to retrieve.
+     * @return The total number of games added to the catalog.
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public int refreshCatalog() throws IOException, InterruptedException
     {
         int lastAppId = 0;
@@ -59,6 +78,10 @@ public class GameCatalogService
         return totalAppsSaved;
     }
 
+    /**
+     * Retrieves a random game from the catalog.
+     * @return 
+     */
     public SteamApp getRandomGame()
     {
         long gameCount = steamAppRepository.count();
